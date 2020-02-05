@@ -1,0 +1,24 @@
+{
+  "name": "test-FSD-task2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alexey-petr0v/test-FSD-task2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alexey-petr0v/test-FSD-task2/issues"
+  },
+  "homepage": "https://github.com/Alexey-petr0v/test-FSD-task2#readme",
+  "devDependencies": {
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}
