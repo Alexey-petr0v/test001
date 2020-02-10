@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production"
   },
   "repository": {
@@ -18,8 +19,10 @@
   },
   "homepage": "https://github.com/Alexey-petr0v/test-FSD-task2#readme",
   "devDependencies": {
+    "path": "^0.12.7",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
     "jquery": "^3.4.1"
