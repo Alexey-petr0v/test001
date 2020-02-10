@@ -21,4 +21,17 @@ let conf = {
     }
 };
 
+/* обычный вариант
 module.exports = conf;
+*/
+
+/* вариант с выводом карты кода в консоль браузера */
+module.exports = (env, options) => {
+    let production = options.mode === 'production';
+
+    conf.devtool = production
+                        ? false
+                        : 'eval-sourcemap';
+
+    return conf;
+}

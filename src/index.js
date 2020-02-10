@@ -5,6 +5,4 @@ import avg from './some.js';
 
 console.log(avg(1, 4, 8));
 
-async function app() {
-    await fetch('fmkl');
-}
+console.log(avg(2, 2, 10));
