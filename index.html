@@ -3,72 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 <body>
     <style>
-        #slider {
-            background: blue;
+     .range-slider {
+          .range-slider__numbers {
+            display: -webkit-flex; 
+            display: flex;
+            position: absolute;
+            justify-content: space-between;
+            margin-top: 30px;
+            text-align: center;
+            color: rgba(31, 32, 65, 0.25);
+            p {
+              cursor: pointer;
+              line-height: 10px;
+              font-size: 10px
+            }
+          }
+          .range-slider__title {
+            display: -webkit-flex; 
+            display: flex;
+            justify-content: space-between;
+            width: 266px;
+            margin-bottom: 19px;
+          }
+          .range-slider__values {
+            font-weight: normal;
+            color: rgba(31, 32, 65, 0.5);
+          }
+          .range-slider__slider {
+            display: -webkit-flex; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 266px; height: 16px;
+          }
+          .range-slider__line {
             position: absolute;
             border: 1px solid #c7c7d0;
             border-radius: 3px;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        #line {
-            background: white;
-            width: 262px ;
-            height: 4px;
-            border-radius: 100px;
-        }
-
-        #pointer {
-            height: 12px;
-            width: 12px;
+            background: #FFFFFF;
+            width: 266px; height: 4px;
+            z-index: 0;
+          }
+          .range-slider__limit {
+            .range-slider__limit_left, .range-slider__limit_right { z-index: 2 }
+          }
+          .range-slider__point {
+            .range-slider__point_1, .range-slider__point_2 {
+              background: linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%);
+              border-radius: 50%;
+              height: 12px; width: 12px;
+              border: 2px solid #FFFFFF
+            }
+          }
+          .range-slider__accent {
             background: linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%);
-            border-radius: 20px;
-            top: -4px;
-            left: 0px;
-            position: absolute;
-            cursor: pointer;
+            height: 4px;
+            flex-grow: 1;
+            z-index: 1;
+          }
         }
     </style>
     <h1 class="title"></h1>
-    <p>---</p>
-    <div id="box">
-      <div id="slider">
-        <div id="line">
-          <div id="pointer"></div>
-        </div>
+  <div class="range-slider">
+    <div class="range-slider__title">
+      <div class="range-slider__title-column">
+        <h3>RANGE SLIDER1</h3>
+      </div>
+      <div class="range-slider__title-column">
+        <h3 class="range-slider__values"><span class="range-slider__output_1">5 000</span>₽ - <span class="range-slider__output_2">10 000</span>₽</h3>
       </div>
     </div>
+    <div class="range-slider__slider">
+      <input name="range-slider" data-output1="5 000" data-output2="10 000" value="{output1: &quot;5 000&quot;, output2: &quot;10 000&quot;}" type="hidden">
+      <div class="range-slider__line"></div>
+      <div class="range-slider__limit range-slider__limit_left">
+        <div class="range-slider__point range-slider__point_1"></div>
+      </div>
+      <div class="range-slider__accent"></div>
+      <div class="range-slider__limit range-slider__limit_right">
+        <div class="range-slider__point range-slider__point_2"></div>
+      </div>
+      <div class="range-slider__numbers"></div>
+    </div>
+  </div>
     <script>
-    var pointer = document.getElementById('pointer');
-    var line 	  = document.getElementById('line');
-    var statusDrag = false;
-    var count = 0;
-    var x;
-    pointer.onmousedown = function(e){
-        statusDrag = true;
-        x = e.pageX - pointer.offsetLeft;
-    }
+        if ($(".range-slider").length) {
+          var ball = document.getElementsByClassName("range-slider__slider")[0];
+          var left = document.getElementsByClassName("range-slider__limit_left")[0];
+          var right = document.getElementsByClassName("range-slider__limit_right")[0];
 
-    document.onmousemove = function(e){
-        if (!statusDrag) { return false }
-        pointer.style.left = e.pageX - x  + 'px';
-        if (pointer.offsetLeft < 0) { pointer.style.left =  0 + 'px' }
-        if (pointer.offsetLeft > line.offsetWidth - pointer.offsetWidth) {
-          pointer.style.left =  line.offsetWidth - pointer.offsetWidth + 'px'
+          var slider = $( ".range-slider__slider" );
+          var offset = slider.offset();
+          var sliderWidth = slider.width();
+          var limitWidth = $(".range-slider__limit").width();
+
+          let valueMin = -100;
+          let valueMax = 100;
+          let value1 = 10;
+          let value2 = 60;
+          let step = 10;
+
+          let allUnits = Math.abs(valueMin) + Math.abs(valueMax);
+          let allSteps = Math.trunc(allUnits / step);
+          let unit = sliderWidth / allUnits;
+          let stepPx = Math.round(step * unit);
+          console.log("stepPx: "+stepPx)
+
+          let bufValue = valueMin
+          let i = 0;
+          while (bufValue < valueMax) {
+            if (i % 2 == 0) {
+              $(".range-slider__numbers").append("<p class='range-slider__number' style='width: "+(stepPx+limitWidth)+"px'>"+bufValue+"</p>")
+            }
+            i++;
+            bufValue += step;
+            console.log((i*stepPx));
+          }
+          if (i % 2 == 0) {
+            $(".range-slider__numbers").append("<p class='range-slider__number' style='width: "+(stepPx+limitWidth)+"px'>"+bufValue+"</p>")
+          }
+
+          console.log("sliderWidth: "+sliderWidth)
+          console.log("limitWidth: "+limitWidth)
+          console.log("bufValue: "+bufValue)
+
+          $(".range-slider__numbers").css({"width": sliderWidth+"px"})
+
+          // делятся на 13 без остатка
+          // 78
+          // 91
+
+          // приближены к числам делимым на 13 без остатка
+          // 81
+          // 89
+
+          // отдалены от чисел делимых на 13 без остатка
+          // 84
+          // 86
+
+          console.log("делятся на 13 без остатка")
+          console.log("78 % 13: "+(78 % 13))
+          console.log("91 % 13: "+(91 % 13))
+          console.log("приближены к числам делимым на 13 без остатка")
+          console.log("81 % 13: "+(81 % 13))
+          console.log("90 % 13: "+(90 % 13))
+          console.log("отдалены от чисел делимых на 13 без остатка")
+          console.log("84 % 13: "+(84 % 13))
+          console.log("86 % 13: "+(86 % 13))
+
+
+
+          // 1. ok пофиксить выползание левого элемента за слайдер
+          // 2. ok пофиксить выползание правого элемента за слайдер
+          // 3. ok создать визуальные отметки значений под лимитом
+          // 3. ok пофиксить: значения второго поинтера не меняется на максимальное
+          // 3. ok пофиксить: значения на одних и тех же точках у лимитов разные
+          // 4. пофиксить левый лимит ломающий минимальный размер выделения
+          // 5. пофиксить правый лимит ломающий минимальный размер выделения
+          // 6. учесть то, что изначально может задано максимальное значение для второго элемента
+          // из-за чего нужно будет автозаполнять концовку слайдера
+
+
+          function calcNumStep (value, valueMin, step) {
+            let i = 0;
+            let bufValue = valueMin;
+            while (bufValue != value) {
+              bufValue += step;
+              i++ 
+            }
+            return i
+          }
+
+          let numStep1 = calcNumStep (value1, valueMin, step);
+          $(".range-slider__output_1").text(value1);
+          let Point1MarginLeft = numStep1*stepPx;
+          $(".range-slider__limit.range-slider__limit_left").css("margin-left", Point1MarginLeft+"px");
+
+          let numStep2 = calcNumStep (value2, valueMin, step);
+          $(".range-slider__output_2").text(value2);
+          let Point2MarginLeft = numStep2*stepPx;
+          let Point2MarginRight = sliderWidth - Point2MarginLeft - limitWidth;
+          $(".range-slider__limit.range-slider__limit_right").css("margin-right", Point2MarginRight+"px");
+
+          left.onmousedown = function(e) { // отследить нажатие
+            moveAt_l(e);
+            function moveAt_l(e) {
+              Point1MarginLeft = (e.clientX - offset.left)-(limitWidth/2);
+              if (Point1MarginLeft < (stepPx / 2)) {
+                $(".range-slider__limit.range-slider__limit_left").css("margin-left", "0px");
+                value1 = valueMin;
+                $(".range-slider__output_1").text(value1);
+              }
+              else if ((Point1MarginLeft > 0)&&(Point1MarginLeft < (Point2MarginLeft - stepPx))) {
+                $(".range-slider__limit.range-slider__limit_left").css("margin-left", Point1MarginLeft+"px");
+              }
+              if ((Point1MarginLeft % stepPx) > (stepPx / 2)){
+                value1 = Math.round((valueMin + Point1MarginLeft / stepPx * step)/step)*step;
+                $(".range-slider__output_1").text(value1);
+              }
+
+            }
+            // перемещать по экрану
+            ball.onmousemove = function(e) { moveAt_l(e) }
+            // отследить окончание переноса
+            left.onmouseup = function() {
+              ball.onmousemove = null;
+              left.onmouseup = null;
+            }
+          }
+
+          right.onmousedown = function(e) { // отследить нажатие
+            moveAt_r(e);
+            function moveAt_r(e) {
+              Point2MarginRight = (sliderWidth-(e.clientX - offset.left))-(limitWidth/2);
+              Point2MarginLeft = sliderWidth - Point2MarginRight - limitWidth;
+              if (value2 == valueMax) {
+                $(".range-slider__limit.range-slider__limit_right").css("margin-right", "0px");
+              }
+              else if ((Point2MarginRight > 0)&&(Point1MarginLeft < (Point2MarginLeft - stepPx))) {
+                $(".range-slider__limit.range-slider__limit_right").css("margin-right", Point2MarginRight+"px");
+              }
+              if ((Point2MarginLeft % stepPx) > (stepPx / 2)){
+                value2 = Math.round((valueMin + Point2MarginLeft / stepPx * step)/step)*step;
+                $(".range-slider__output_2").text(value2);
+              }
+              console.log("Point2MarginLeft: "+Point2MarginLeft+", value2: "+value2)
+            }
+            // перемещать по экрану
+            ball.onmousemove = function(e) { moveAt_r(e) }
+            // отследить окончание переноса
+            right.onmouseup = function() {
+              ball.onmousemove = null;
+              right.onmouseup = null;
+            }
+          }
+
+          // let numberLength = $(".range-slider__number").length;
+          // for (let i = 0; i < numberLength; i++) {
+          //   document.getElementsByClassName("range-slider__number")[i].addEventListener("click", function(){
+          //     console.log($(".range-slider__number").text())
+          //   }, false);
+          // }
         }
-        count = pointer.offsetLeft;
-        document.getElementsByTagName('p')[0].innerHTML = count;
-    }
-
-    document.onmouseup = function(){
-        statusDrag = false;
-    }
     </script>
 </body>
 </html>
