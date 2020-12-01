@@ -5,7 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <style>
+        #slider {
+            background: blue;
+            position: absolute;
+            border: 1px solid #c7c7d0;
+            border-radius: 3px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        #line {
+            background: white;
+            width: 262px ;
+            height: 4px;
+            border-radius: 100px;
+        }
+
+        #pointer {
+            height: 12px;
+            width: 12px;
+            background: linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%);
+            border-radius: 20px;
+            top: -4px;
+            left: 0px;
+            position: absolute;
+            cursor: pointer;
+        }
+    </style>
     <h1 class="title"></h1>
+    <p>---</p>
+    <div id="box">
+      <div id="slider">
+        <div id="line">
+          <div id="pointer"></div>
+        </div>
+      </div>
+    </div>
     <script>
     var pointer = document.getElementById('pointer');
     var line 	  = document.getElementById('line');
