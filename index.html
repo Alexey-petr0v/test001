@@ -6,6 +6,31 @@
 </head>
 <body>
     <h1 class="title"></h1>
-    <script src="dist/main.js"></script>
+    <script>
+    var pointer = document.getElementById('pointer');
+    var line 	  = document.getElementById('line');
+    var statusDrag = false;
+    var count = 0;
+    var x;
+    pointer.onmousedown = function(e){
+        statusDrag = true;
+        x = e.pageX - pointer.offsetLeft;
+    }
+
+    document.onmousemove = function(e){
+        if (!statusDrag) { return false }
+        pointer.style.left = e.pageX - x  + 'px';
+        if (pointer.offsetLeft < 0) { pointer.style.left =  0 + 'px' }
+        if (pointer.offsetLeft > line.offsetWidth - pointer.offsetWidth) {
+          pointer.style.left =  line.offsetWidth - pointer.offsetWidth + 'px'
+        }
+        count = pointer.offsetLeft;
+        document.getElementsByTagName('p')[0].innerHTML = count;
+    }
+
+    document.onmouseup = function(){
+        statusDrag = false;
+    }
+    </script>
 </body>
 </html>
